@@ -8,23 +8,22 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
-import telegram
+from telegram import Bot
 from dotenv import load_dotenv
 
 load_dotenv()
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 GRUPO_ID = os.getenv("ID_DO_GRUPO")
-URL_WEBHOOK = os.getenv("URL_RENDERIZAÇÃO")
+URL_WEBHOOK = os.getenv("URL_RENDERIZACAO")
 
-bot = telegram.Bot(token=BOT_TOKEN)
+bot = Bot(token=BOT_TOKEN)
 app = Flask(__name__)
 
 # Horários de postagem (você pode ajustar)
 HORARIOS = ["08:00", "12:00", "16:00", "20:00"]
 
 # Inicializa navegador headless para scraping
-
 def iniciar_driver():
     chrome_options = Options()
     chrome_options.add_argument("--headless")
@@ -72,13 +71,11 @@ def gerar_bilhete():
     return bilhete
 
 # Envia bilhete
-
 def enviar_bilhete():
     bilhete = gerar_bilhete()
     bot.send_message(chat_id=GRUPO_ID, text=bilhete)
 
 # Agenda automática com base no horário
-
 def agendador():
     while True:
         agora = time.strftime("%H:%M")
